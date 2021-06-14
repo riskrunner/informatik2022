@@ -1,0 +1,46 @@
+html, body
+{
+}
+
+
+a:link{
+	color: white;
+	background-color: transparent;
+	text-decoration: none;
+}
+a:hover{
+	color: red;
+	background-color: transparent;
+	text-decoration: underline;
+}
+a:visited{
+	color: grey;
+	background-color: transparent;
+	text-decoration: none;
+}
+
+.header {
+    height: 10hv;
+    width: auto;
+    background-color: #2E2EFE;
+}
+
+.headerFace{
+    color: #FFFFFF;
+    font-size: 38pt;
+    font: bold;
+}
+
+.mailtel{
+    color: #FFFFFF;
+    font: Verdana;
+    font-size: 12pt;
+}
+
+.anmelden{
+    color: #FFFFFF;
+    background-color: #2E2EFE;
+}den{
+    color: #FFFFFF;
+    background-color: #2E2EFE;
+}}}
