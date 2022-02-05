@@ -9,8 +9,6 @@
 
 
 
-
-
 <title>KSL-Leihbibliothek</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,9 +57,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
         <button type="submit" class="w3-button w3-white" name="Book_filter" ><i class="fa fa-diamond w3-margin-right"></i>Books</button>
         <button type="submit" class="w3-button w3-white w3-hide-small" name="DVD_filter" ><i class="fa fa-photo w3-margin-right"></i>DVD</button>
         <button type="submit" class="w3-button w3-white w3-hide-small" name="CD_filter" ><i class="fa fa-map-pin w3-margin-right"></i>CD</button>
-        <button type="submit" class="w3-button w3-white w3-hide-small" name="Film_filter" ><i class="fa fa-map-photo w3-margin-right"></i>Film</button>
+        <button type="submit" class="w3-button w3-white w3-hide-small" name="Film_filter" ><i class="fa fa-photo w3-margin-right"></i>Film</button>
         <button type="submit" class="w3-button w3-white w3-hide-small" name="ZS_filter" ><i class="fa fa-map-pin w3-margin-right"></i>Zeitschrift</button>
-        <input type="text" style="height: auto;" name="search_trm">
+        <input type="text" style="height: auto;" name="search_trm" placeholder="suchen">
         <button class="w3-button w3-black">Search</button>
       </form>
     </div>
@@ -81,9 +79,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     if ($conn->connect_error){
         die("Error connecting to server: " . $conn->connect_error);
     }
-    echo "connection established";
-
-    $search_trm=$_GET['search_trm'];
+    #echo "connection established";
+    if(isset($_GET['search_trm']) && $_GET['search_trm'] !== ''){
+      $search_trm=$_GET['search_trm'];
+    }
+    else{$search_trm = '';}
 
     $sqlBestandSearch = "SELECT * FROM `tabellebuechereibestand` WHERE INSTR(NameObj, '$search_trm')>0";
 
@@ -116,18 +116,57 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
               $QueryOutput = $conn->query($sqlMedium);
               $QOArray = $QueryOutput->fetch_array();
               $ResObjTyp = $QOArray['NameMedienArt'];
+              $sqlBoolleih = "SELECT IsAusleihbar FROM `tabellemedienarten`WHERE IDMedienArt=$ObjTyp";
+              $Boolleih = $conn->query($sqlBoolleih);
+              $QBoolleih = $Boolleih->fetch_array();
               #echo "<img src=\" " . $row['NameObj'] . ".jpg\" alt=\" " . $row['NameObj'] . "\" style=\"width:45%;\" class=\"w3-round\">" ;
               echo "<div class=\"w3-third w3-container w3-margin-bottom\">";
-                echo "<img src=\" " . $row['NameObj'] . ".jpg\" alt=\" ". $row['NameObj'] . ".jpg \" style=\"width:100%\" class=\"w3-hover-opacity\">";
+                echo "<img src=\"C:\xampp\htdocs\test\Bilder\ " . $row['NameObj'] . ".jpg\" alt=\" ". $row['NameObj'] . " \" style=\"width:100%\" class=\"w3-hover-opacity\">";
                 echo "<div class=\"w3-container w3-white\">";
                   echo "<p><b>" . $row['NameObj'] . "</b></p>";
                   echo "<p>". $ResObjTyp . "</p>";
+                  if($QBoolleih['IsAusleihbar'] == 1){
+                  echo "<form method=\"get\" action=\"etst.php\">";
+                  echo "<button name=\"leihbtn_" . $row['IDObj'] . "\" type=\"submit\" class=\"w3-button w3-black\">Ausleihen</button><t>";
+                  echo "</form>";
+                  echo "<form method=\"get\" action=\"etst.php\">";
+                  echo "<button name=\"res_btn\" type=\"submit\" class=\"w3-button w3-black\">Reservieren</button>";
+                  echo "</form>";
+                  }
                 echo "</div>";
               echo "</div>";
             }
             echo "</div>";
         }
       }
+?>
+
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$DBname = "leihbuechereimysqldb";
+
+$conn = new mysqli($servername, $username, $password, $DBname);
+
+$ObjId=0;
+for ($x = 0; $x <= 40; $x++) {
+  if(isset($_GET['leihbtn_'.$x])){
+    $ObjID = $x;
+    break;
+  }
+}
+
+$datetoday = new DateTime();
+$abgabe_datum = date_add($datetoday,date_interval_create_from_date_string("14 days"));
+$Datum = date_format($abgabe_datum, 'Y-m-d');
+$sqlleihinput = "INSERT INTO tabelleausleihe (IDLeihObj, IDLeihKunde, AbgabeFrist) VALUES ('$ObjId', 0, '$Datum')";
+
+if ($conn->query($sqlleihinput) === TRUE) {
+} else {
+  echo "Error: " . $sqlleihinput . "<br>" . $conn->error;
+}
+
 ?>
 
             <!-- Second Photo Grid
