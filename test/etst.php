@@ -5,7 +5,10 @@
 
 
 
-
+<?php
+$isLogedIn = FALSE;
+$curName = "";
+?>
 
 
 
@@ -26,13 +29,15 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
       <i class="fa fa-remove"></i>
     </a>
-    <img src="/cat.jpg" style="width:45%;" class="w3-round"><br><br>
+    <img src="websiteicon.png" style="width:45%;" class="w3-round"><br><br>
     <h4><b>Ausleihe</b></h4>
-    <p class="w3-text-grey">Template by W3.CSS</p>
   </div>
   <div class="w3-bar-block">
     <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Sortiment</a> 
     <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i>Sign in</a>
+    <a href="https://www.tu.berlin/ub/" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i></i>Universitäts-Bibliothek</a>
+    <a href="ausleihen.php" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i></i>Ausleihen</a>
+    <a href="reservieren.php" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i></i>Reservieren</a>
   </div>
   
 </nav>
@@ -48,10 +53,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
     <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
     <div class="w3-container">
-    <h1><b>Featured Media</b></h1>
+    <h1><b>Featured Media/Bestand:</b></h1>
 
     <div class="w3-section w3-bottombar w3-padding-16">
-      <form action=etst.php method="get" id=search_frm>
+      <form action="etst.php" method="GET" id="search_frm">
         <span class="w3-margin-right">Filter:</span> 
         <button type="submit" class="w3-button w3-black" name="All_filter" ></i>ALL</button>
         <button type="submit" class="w3-button w3-white" name="Book_filter" ><i class="fa fa-diamond w3-margin-right"></i>Books</button>
@@ -87,24 +92,24 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
     $sqlBestandSearch = "SELECT * FROM `tabellebuechereibestand` WHERE INSTR(NameObj, '$search_trm')>0";
 
-    #if(isset($GET_['All_filter'])){
-    #  $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE INSTR(NameObj, '$search_trm')>0";
-    #}
-    #if(isset($GET_['Book_filter'])){
-    #  $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND ObjTyp = 1)";
-    #}
-    #if(isset($GET_['DVD_filter'])){
-    #  $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND ObjTyp = 5)";
-    #}
-    #if(isset($GET_['CD_filter'])){
-    #  $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND ObjTyp = 3)";
-    #}
-    #if(isset($GET_['Film_filter'])){
-    #  $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND ObjTyp = 4)";
-    #}
-    #if(isset($GET_['ZS_filter'])){
-    #  $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND (ObjTyp = 6 OR ObjTyp = 2))";
-    #}
+    if(isset($_GET['All_filter'])){
+      $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE INSTR(NameObj, '$search_trm')>0";
+    }
+    if(isset($_GET['Book_filter'])){
+      $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND ObjTyp = 1)";
+    }
+    if(isset($_GET['DVD_filter'])){
+      $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND ObjTyp = 5)";
+    }
+    if(isset($_GET['CD_filter'])){
+      $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND ObjTyp = 3)";
+    }
+    if(isset($_GET['Film_filter'])){
+      $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND ObjTyp = 4)";
+    }
+    if(isset($_GET['ZS_filter'])){
+      $sqlBestandSearch= "SELECT * FROM `tabellebuechereibestand` WHERE (INSTR(NameObj, '$search_trm')>0 AND (ObjTyp = 6 OR ObjTyp = 2))";
+    }
 
     if($result = $conn->query($sqlBestandSearch)){
         if($result->num_rows>0){
@@ -121,18 +126,24 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
               $QBoolleih = $Boolleih->fetch_array();
               #echo "<img src=\" " . $row['NameObj'] . ".jpg\" alt=\" " . $row['NameObj'] . "\" style=\"width:45%;\" class=\"w3-round\">" ;
               echo "<div class=\"w3-third w3-container w3-margin-bottom\">";
-                echo "<img src=\"C:\xampp\htdocs\test\Bilder\ " . $row['NameObj'] . ".jpg\" alt=\" ". $row['NameObj'] . " \" style=\"width:100%\" class=\"w3-hover-opacity\">";
+                echo "<img src=\"" . $row['NameObj'] . ".jpg\" alt=\" ". $row['NameObj'] . " \" style=\"height=100px; width:100%; object-fit:cover;\" height=\"500px\"  class=\"w3-hover-opacity\">";
                 echo "<div class=\"w3-container w3-white\">";
-                  echo "<p><b>" . $row['NameObj'] . "</b></p>";
-                  echo "<p>". $ResObjTyp . "</p>";
-                  if($QBoolleih['IsAusleihbar'] == 1){
-                  echo "<form method=\"get\" action=\"etst.php\">";
-                  echo "<button name=\"leihbtn_" . $row['IDObj'] . "\" type=\"submit\" class=\"w3-button w3-black\">Ausleihen</button><t>";
+                echo "<p><b>" . $row['NameObj'] . "</b></p>";
+                echo "<p>". $ResObjTyp . "</p>";
+                if(($QBoolleih['IsAusleihbar'] == 1 and $row['ObjLeihStatus'] == 0) and $row['ObjResStatus'] == 0){
+                  echo "<form method=\"get\" action=\"ausleihen.php\">";
+                  echo "<button href=\"ausleihen.php\" name=\"leihbtn_" . $row['IDObj'] . "\" type=\"submit\" class=\"w3-button w3-black\">Ausleihen</button><t>";
                   echo "</form>";
-                  echo "<form method=\"get\" action=\"etst.php\">";
-                  echo "<button name=\"res_btn\" type=\"submit\" class=\"w3-button w3-black\">Reservieren</button>";
+                } else{
+                  echo "<button class=\"w3-button w3-gray\">Ausleihen</button><br>";
+                }
+                if($QBoolleih['IsAusleihbar'] == 1 and $row['ObjResStatus'] == 0){
+                  echo "<form method=\"get\" action=\"reservieren.php\">";
+                  echo "<button name=\"resbtn_" . $row['IDObj'] . "\" type=\"submit\" class=\"w3-button w3-black\">Reservieren</button>";
                   echo "</form>";
-                  }
+                } else{
+                  echo "<button class=\"w3-button w3-gray\">Reservieren</button>";
+                }
                 echo "</div>";
               echo "</div>";
             }
@@ -141,117 +152,24 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
       }
 ?>
 
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$DBname = "leihbuechereimysqldb";
-
-$conn = new mysqli($servername, $username, $password, $DBname);
-
-$ObjId=0;
-for ($x = 0; $x <= 40; $x++) {
-  if(isset($_GET['leihbtn_'.$x])){
-    $ObjID = $x;
-    break;
-  }
-}
-
-$datetoday = new DateTime();
-$abgabe_datum = date_add($datetoday,date_interval_create_from_date_string("14 days"));
-$Datum = date_format($abgabe_datum, 'Y-m-d');
-$sqlleihinput = "INSERT INTO tabelleausleihe (IDLeihObj, IDLeihKunde, AbgabeFrist) VALUES ('$ObjId', 0, '$Datum')";
-
-if ($conn->query($sqlleihinput) === TRUE) {
-} else {
-  echo "Error: " . $sqlleihinput . "<br>" . $conn->error;
-}
-
-?>
-
-            <!-- Second Photo Grid
-            <div class="w3-row-padding">
-              <div class="w3-third w3-container w3-margin-bottom">
-                <img src="" alt="Book" style="width:100%" class="w3-hover-opacity">
-                <div class="w3-container w3-white">
-                  <p><b>Title</b></p>
-                  <p>Summary through php</p>
-                </div>
-              </div>
-              <div class="w3-third w3-container w3-margin-bottom">
-                <img src="" alt="Book" style="width:100%" class="w3-hover-opacity">
-                <div class="w3-container w3-white">
-                  <p><b>Title</b></p>
-                  <p>Summary through php</p>
-                </div>
-              </div>
-              <div class="w3-third w3-container w3-margin-bottom">
-                <img src="" alt="Book" style="width:100%" class="w3-hover-opacity">
-                <div class="w3-container w3-white">
-                  <p><b>Title</b></p>
-                  <p>Summary through php</p>
-                </div>
-              </div>
-            </div>
-            -->
-          
-  <!-- Pagination -->
-  <div class="w3-center w3-padding-32">
-    <div class="w3-bar">
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">�</a>
-      <a href="#" class="w3-bar-item w3-black w3-button">1</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">2</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">3</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">4</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">�</a>
-    </div>
-  </div>
-
-  
-    
-    
-  
-    
-    
-  
-  <!-- Login -->
-  <div class="w3-container w3-padding-large w3-grey">
-    <h4 id="contact"><b>Sign in</b></h4>
-    <h5>accounts can only be created at a library</h5>
-    <hr class="w3-opacity">
-    <form action="/action_page.php" target="_blank">
-      <div class="w3-section">
-        <label>Name</label>
-        <input class="w3-input w3-border" type="text" name="alias" required>
-      </div>
-      
-      <div class="w3-section">
-        <label>Password</label>
-        <input class="w3-input w3-border" type="text" name="password" required>
-      </div>
-      <button type="submit" class="w3-button w3-black w3-margin-bottom"><i class="fa fa-paper-plane w3-margin-right"></i>Log in</button>
-    </form>
-  </div>
-
   <!-- Footer -->
   <footer class="w3-container w3-padding-32 w3-dark-grey">
   <div class="w3-row-padding">
     <div class="w3-third">
       <h3>FOOTER</h3>
       <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
     </div>
   
     <div class="w3-third">
       <h3>NEWS</h3>
       <ul class="w3-ul w3-hoverable">
         <li class="w3-padding-16">
-          <img src="/w3images/workshop.jpg" class="w3-left w3-margin-right" style="width:50px">
+          <img src="websiteicon.png" class="w3-left w3-margin-right" style="width:50px">
           <span class="w3-large">Lorem</span><br>
           <span>Sed mattis nunc</span>
         </li>
         <li class="w3-padding-16">
-          <img src="/w3images/gondol.jpg" class="w3-left w3-margin-right" style="width:50px">
+          <img src="websiteicon.png" class="w3-left w3-margin-right" style="width:50px">
           <span class="w3-large">Ipsum</span><br>
           <span>Praes tinci sed</span>
         </li> 
@@ -270,8 +188,6 @@ if ($conn->query($sqlleihinput) === TRUE) {
 
   </div>
   </footer>
-  
-  <div class="w3-black w3-center w3-padding-24">Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-opacity">w3.css</a></div>
 
 <!-- End page content -->
 </div>
