@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
 
+<!-- Redundande Kommentare sind nicht erneut eingefügt - index und reservieren enthalten die weiteren Kommentare -->
+
 <title>KSL-Leihbibliothek</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
+
+<style> 
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 </style>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+<nav class="w3-sidebar w3-collapse w3-grey w3-animate-left" style="z-index:3;width: 300px;" id="mySidebar"><br>
   <div class="w3-container">
     <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
       <i class="fa fa-remove"></i>
     </a>
-    <img src="/cat.jpg" style="width:45%;" class="w3-round"><br><br>
+    <img src="websiteicon.png" style="width:45%;" class="w3-round"><br><br>
     <h4><b>Ausleihe</b></h4>
   </div>
+  
   <div class="w3-bar-block">
-    <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Sortiment</a> 
-    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i>Sign in</a>
-    <a href="https://www.tu.berlin/ub/" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i></i>Universitäts-Bibliothek</a>
+    <a href="/test/etst.php" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-white">Sortiment</a> 
+    <a href="https://www.tu.berlin/ub/" onclick="w3_close()" class="w3-bar-item w3-button w3-padding">Universitäts-Bibliothek</a>
   </div>
   
 </nav>
@@ -36,11 +38,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 <div class="w3-main" style="margin-left:300px">
 
 <!-- Header -->
-<header id="portfolio">
-  <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+<header id="header">
+  <a href="#"><img src="placeholder.png" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
   <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
   <div class="w3-container">
-  <h1><b>Ausleihen:</b></h1>>
+  <h1><b>Ausleihen:</b></h1>
 </header>
 
 <body>
@@ -84,7 +86,8 @@ $datetoday = new DateTime();
 $abgabe_datum = date_add($datetoday,date_interval_create_from_date_string("14 days"));
 $Datum = date_format($abgabe_datum, 'Y-m-d');
 
-echo "<div class=\"w3-container w3-padding-large w3-grey\">";
+#Erstellen des Ausleihen Bereichs
+echo "<div class=\"w3-container w3-padding-large w3-dark-blue\">";
     echo "<h4 id=\"Leihe\"><b>Ausleihen:</b></h4>";
     echo "<h5>Ausgeliehene Medien können nur vor Ort in der Bibliothek abgeholt werden</h5>";
     echo "<hr class=\"w3-opacity\">";
@@ -94,7 +97,7 @@ echo "<div class=\"w3-container w3-padding-large w3-grey\">";
         echo "<input class=\"w3-input w3-border\" type=\"text\" name=\"BestandName\" required value=\"" . $BestandName . "\">";
       echo "</div>";
       echo "<div class=\"w3-section\">";
-        echo "<label>Abgabe Datum: (Zwei Wochen von Heute)</label>";
+        echo "<label>Abgabe Datum für heute ausgeliehene Objekte: (Zwei Wochen von Heute)</label>";
         echo "<label class=\"w3-input w3-border\ name=\"AbgabeDatum\">" . $Datum . "</label>";
       echo "</div>";
       echo "<div class=\"w3-section\">";
@@ -209,19 +212,19 @@ if ($conn->query($sqlleihinput) === TRUE) {
   <div class="w3-row-padding">
     <div class="w3-third">
       <h3>FOOTER</h3>
-      <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      <p>Hier unten befindet sich kein weiterer Inhalt, das ist hier das Ende der Seite.</p>
     </div>
   
     <div class="w3-third">
       <h3>NEWS</h3>
       <ul class="w3-ul w3-hoverable">
         <li class="w3-padding-16">
-          <img src="/w3images/workshop.jpg" class="w3-left w3-margin-right" style="width:50px">
+          <img src="placeholder.png" class="w3-left w3-margin-right" style="width:50px">
           <span class="w3-large">Lorem</span><br>
           <span>Sed mattis nunc</span>
         </li>
         <li class="w3-padding-16">
-          <img src="/w3images/gondol.jpg" class="w3-left w3-margin-right" style="width:50px">
+          <img src="placeholder.png" class="w3-left w3-margin-right" style="width:50px">
           <span class="w3-large">Ipsum</span><br>
           <span>Praes tinci sed</span>
         </li> 
@@ -232,8 +235,8 @@ if ($conn->query($sqlleihinput) === TRUE) {
       <h3>Contact us</h3>
       <h5>jk pls dont</h5>
       <p>
-        email@email.com
-        374074807992
+        email@email.com </br>
+        030-1234567   </br>
         Berlin, GERMANY
       </p>
     </div>
